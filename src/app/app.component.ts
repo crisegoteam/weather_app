@@ -21,6 +21,7 @@ import {
   transition,
 } from '@angular/animations';
 
+import * as fakeWeatherData from './resources/weatherTestData.json';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -95,8 +96,12 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (weather: WeatherForecastResponse) =>
           (this.forecastWeather = weather),
-        error: (error) => console.log(error),
+        error: (error) => this.handleCurrrentWeatherResponseError(error),
       });
+  }
+  handleCurrrentWeatherResponseError(error: any) {
+    console.log(error);
+    this.forecastWeather = fakeWeatherData;
   }
   getIconWeather(weather: WeatherForecastResponse) {
     if (weather) {
@@ -131,7 +136,6 @@ export class AppComponent implements OnInit, OnDestroy {
   openSidebar() {
     this.showSidebar = !this.showSidebar;
     setTimeout(() => {
-      // this will make the execution after the above boolean has changed
       this.searchInput.nativeElement.focus();
     }, 300);
   }
