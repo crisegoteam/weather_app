@@ -82,11 +82,13 @@
           <p class="flex items-center">
             <strong
               class="text-7xl md:text-8xl text-white hover:text-gray-400"
-              >{{ forecastWeather?.current?.temp_c }}</strong
+              >{{ getTemperature(forecastWeather) }}</strong
             >
             <img
               class="invert grayscale"
-              src="assets/icons/weather/celsius.svg"
+              src="assets/icons/weather/{{
+                isCelsius ? 'celsius' : 'fahrenheit'
+              }}.svg"
               width="90"
               alt=""
             />
@@ -116,8 +118,36 @@
       </div>
     </div>
     <div class="predictions_time col-span-12 lg:col-span-8 2xl:col-span-9">
-      <div class="highlights_stats bg-pink-300">Today's Highlights</div>
-      <div class="highlights_stats bg-pink-300">Today's Highlights</div>
+      <div class="w-10/12 lg:w-9/12 mx-auto">
+        <div class="flex justify-end gap-4 py-2 px-4 hidden lg:flex">
+          <span
+            (click)="changeTemperature(forecastWeather, 'temp_c')"
+            class="rounded-full bg-white cursor-pointer"
+            [ngClass]="{ 'bg-white': isCelsius, 'bg-violet-900': !isCelsius }"
+          >
+            <img
+              [ngClass]="{ 'invert-0': isCelsius, invert: !isCelsius }"
+              src="assets/icons/weather/celsius.svg"
+              width="45"
+              alt=""
+            />
+          </span>
+          <span
+            (click)="changeTemperature(forecastWeather, 'temp_f')"
+            class="rounded-full cursor-pointer"
+            [ngClass]="{ 'bg-violet-900': isCelsius, 'bg-white': !isCelsius }"
+          >
+            <img
+              [ngClass]="{ 'invert-0': !isCelsius, invert: isCelsius }"
+              src="assets/icons/weather/fahrenheit.svg"
+              width="45"
+              alt=""
+            />
+          </span>
+        </div>
+        <div class="highlights_stats bg-pink-300">Today's Highlights</div>
+        <div class="highlights_stats bg-pink-300">Today's Highlights</div>
+      </div>
     </div>
   </div>
 </div>
