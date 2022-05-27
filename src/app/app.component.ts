@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GeolocationResponse } from './models/geolocation';
@@ -7,10 +7,35 @@ import { GeolocationService } from './services/geolocation.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { WeatherService } from './services/weather.service';
 
+import { trigger, state, style, animate, transition } from '@angular/animations';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
+  animations: [
+    trigger(
+      'inOutAnimation', 
+      [
+        transition(
+          ':enter', 
+          [
+            style({ height: 0, opacity: 0 }),
+            animate('0.5s ease-out', 
+                    style({ height: 300, opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave', 
+          [
+            style({ height: 300, opacity: 1 }),
+            animate('0.5s ease-in', 
+                    style({ height: 0, opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'weather_app';
@@ -19,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   currentLocation!: GeolocationResponse;
   forecastWeather!: WeatherForecastResponse;
   @ViewChild('searchLocationWeatherForm') searchLocationWeatherForm!: NgForm;
+  @ViewChild('searchInput') searchInput!: ElementRef;
   showSidebar: boolean = false;
   constructor(
     private geolocationService: GeolocationService,
@@ -98,5 +124,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getCurrentWeather(data);
     this.searchLocationWeatherForm.reset();
     this.showSidebar = !this.showSidebar;
+  }
+  openSidebar(){
+    this.showSidebar = !this.showSidebar;
+    setTimeout(()=>{ // this will make the execution after the above boolean has changed
+      this.searchInput.nativeElement.focus();
+    },300); 
   }
 }
