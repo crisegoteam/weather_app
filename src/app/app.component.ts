@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GeolocationResponse } from './models/geolocation';
 import { WeatherDataToSend, WeatherForecastResponse } from './models/weather';
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   weatherSubscription!: Subscription;
   currentLocation!: GeolocationResponse;
   forecastWeather!: WeatherForecastResponse;
+  @ViewChild('searchLocationWeatherForm') searchLocationWeatherForm!: NgForm;
   constructor(
     private geolocationService: GeolocationService,
     private localStorageService: LocalStorageService,
@@ -32,7 +34,11 @@ export class AppComponent implements OnInit, OnDestroy {
   getGeolocation() {
     const currentLocation = this.localStorageService.getItem('currentLocation');
     if (currentLocation.country_name) {
-      this.getCurrentWeather(currentLocation);
+      const data: WeatherDataToSend = {
+        query: currentLocation.country_name,
+        days: '5',
+      };
+      this.getCurrentWeather(data);
       return (this.currentLocation = currentLocation);
     }
     this.geolocationSubscription = this.geolocationService
@@ -46,14 +52,14 @@ export class AppComponent implements OnInit, OnDestroy {
   handleGeoLocationResponse(geolocation: GeolocationResponse) {
     this.currentLocation = geolocation;
     this.localStorageService.setItem('currentLocation', geolocation);
-    this.getCurrentWeather(this.currentLocation);
-  }
-
-  getCurrentWeather(currentLocation: GeolocationResponse) {
     const data: WeatherDataToSend = {
-      query: currentLocation.country_name,
+      query: this.currentLocation.country_name,
       days: '5',
     };
+    this.getCurrentWeather(data);
+  }
+
+  getCurrentWeather(data: WeatherDataToSend) {
     this.weatherSubscription = this.weatherService
       .getForecastWeather(data)
       .subscribe({
@@ -64,18 +70,31 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   getIconWeather(weather: WeatherForecastResponse) {
     if (weather) {
-      const image = weather.current.condition.icon.split('/').pop();
-      return `https://cdn.weatherapi.com/weather/128x128/night/${image}`;
+      const image = weather.current.condition.icon.split('/');
+      return `https://cdn.weatherapi.com/weather/128x128/${image.at(
+        -2
+      )}/${image.at(-1)}`;
     }
     return './assets/icons/weather/celsius.svg';
   }
   formatDate(dateWeather: string) {
     const date = new Date(dateWeather);
+    const time = date.getTime();
     const options: any = {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
     };
     return date.toLocaleDateString('en-EN', options);
+  }
+  searchLocation(location: { location: string }) {
+    const data = {
+      query: location.location,
+      days: '5',
+    };
+    this.getCurrentWeather(data);
+    this.searchLocationWeatherForm.reset();
   }
 }
