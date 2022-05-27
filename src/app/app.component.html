@@ -119,10 +119,10 @@
     </div>
     <div class="predictions_time col-span-12 lg:col-span-8 2xl:col-span-9">
       <div class="w-10/12 lg:w-9/12 mx-auto">
-        <div class="flex justify-end gap-4 py-2 px-4 hidden lg:flex">
+        <div class="flex justify-end gap-4 py-2 px-4">
           <span
             (click)="changeTemperature(forecastWeather, 'temp_c')"
-            class="rounded-full bg-white cursor-pointer"
+            class="rounded-full bg-white cursor-pointer hidden lg:flex"
             [ngClass]="{ 'bg-white': isCelsius, 'bg-violet-900': !isCelsius }"
           >
             <img
@@ -134,7 +134,7 @@
           </span>
           <span
             (click)="changeTemperature(forecastWeather, 'temp_f')"
-            class="rounded-full cursor-pointer"
+            class="rounded-full cursor-pointer hidden lg:flex"
             [ngClass]="{ 'bg-violet-900': isCelsius, 'bg-white': !isCelsius }"
           >
             <img
