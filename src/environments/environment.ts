@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api: {
+    geolocation: { url: 'http://api.ipbase.com/v1/json/' },
+    weather: {
+      key: 'e0b22d7f4b884b3e85104732222605',
+      url_history: 'http://api.weatherapi.com/v1/history.json',
+      url_forecast: 'http://api.weatherapi.com/v1/forecast.json',
+      url_current: 'http://api.weatherapi.com/v1/current.json',
+    },
+  },
 };
 
 /*
