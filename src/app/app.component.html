@@ -1,25 +1,76 @@
 <div class="mx-auto">
-  <div class="grid grid-cols-12">
+  <div class="grid grid-cols-12 relative">
+    <div
+      *ngIf="showSidebar"
+      [@inOutAnimation]
+      class="w-full md:w-6/12 lg:w-4/12 2xl:w-3/12 z-10 bg-slate-800 min-h-screen absolute"
+    >
+      <div class="flex justify-end">
+        <span class="px-2 py-1" (click)="showSidebar = !showSidebar">
+          <img
+            class="hover:invert"
+            src="assets/icons/close-svgrepo-com.svg"
+            width="30"
+            alt=""
+          />
+        </span>
+      </div>
+      <form
+        #searchLocationWeatherForm="ngForm"
+        (ngSubmit)="searchLocation(searchLocationWeatherForm.value)"
+        autocomplete="off"
+      >
+        <div class="flex justify-center gap-4 py-4">
+          <div class="w-8/12 relative">
+            <img
+              class="invert grayscale hover:invert-0 p-2 absolute"
+              src="assets/icons/search-svgrepo-com.svg"
+              width="37"
+              alt=""
+            />
+            <input
+              #searchInput
+              class="py-1.5 w-full pl-10 bg-slate-800 border focus:border border-white outline-none text-white font-extralight capitalize"
+              type="text"
+              placeholder="search location"
+              ngModel
+              name="location"
+              required
+            />
+          </div>
+          <div class="">
+            <button
+              [disabled]="searchLocationWeatherForm.invalid"
+              type="submit"
+              class="bg-blue-900 border border-blue-900 py-1.5 px-4 hover:bg-slate-700 text-white font-light"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
     <div
       class="current_time bg-slate-800 col-span-12 lg:col-span-4 2xl:col-span-3 min-h-screen"
     >
       <div class="grid grid-cols-2 py-4">
         <div class="justify-self-start mx-5">
           <button
-            class="text-white hover:text-neutral-900 bg-gray-500 hover:bg-gray-100 p-2 rounded"
+            (click)="openSidebar()"
+            class="text-white text-sm hover:text-neutral-900 bg-gray-500 hover:bg-gray-100 p-2 rounded"
           >
             Search for places
           </button>
         </div>
         <div class="justify-self-end mx-5">
           <button
-          (click)="getGeolocation()"
+            (click)="getGeolocation()"
             class="text-white bg-gray-500 hover:bg-gray-100 cursor-pointer rounded-full"
           >
             <img
               class="invert grayscale hover:invert-0 p-2"
               src="assets/icons/compass-gps.svg"
-              width="40"
+              width="38"
               alt=""
             />
           </button>
@@ -29,9 +80,10 @@
         </div>
         <div class="col-span-2 justify-self-center">
           <p class="flex items-center">
-            <strong class="text-7xl md:text-8xl text-white hover:text-gray-400">{{
-              forecastWeather?.current?.temp_c
-            }}</strong>
+            <strong
+              class="text-7xl md:text-8xl text-white hover:text-gray-400"
+              >{{ forecastWeather?.current?.temp_c }}</strong
+            >
             <img
               class="invert grayscale"
               src="assets/icons/weather/celsius.svg"
@@ -46,17 +98,17 @@
           </p>
         </div>
         <div class="col-span-2 justify-self-center py-10 md:py-20">
-          <p class="text-gray-500 font-bold">
+          <p class="text-gray-500 font-bold text-center">
             {{ formatDate(forecastWeather?.location?.localtime) }}
           </p>
-          <p class="flex items-center py-2">
+          <p class="flex justify-center text-center py-2">
             <img
               class="invert grayscale"
               src="assets/icons/placeholder-gps-svgrepo-com.svg"
               width="25"
               alt=""
             />
-            <span class="text-white py-8">{{
+            <span class="text-white py-8 text-center">{{
               forecastWeather?.location?.region
             }}</span>
           </p>
