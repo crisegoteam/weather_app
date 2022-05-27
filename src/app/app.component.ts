@@ -19,6 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   currentLocation!: GeolocationResponse;
   forecastWeather!: WeatherForecastResponse;
   @ViewChild('searchLocationWeatherForm') searchLocationWeatherForm!: NgForm;
+  showSidebar: boolean = false;
   constructor(
     private geolocationService: GeolocationService,
     private localStorageService: LocalStorageService,
@@ -96,5 +97,6 @@ export class AppComponent implements OnInit, OnDestroy {
     };
     this.getCurrentWeather(data);
     this.searchLocationWeatherForm.reset();
+    this.showSidebar = !this.showSidebar;
   }
 }
