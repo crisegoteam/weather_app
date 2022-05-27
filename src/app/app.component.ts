@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   getGeolocation() {
     const currentLocation = this.localStorageService.getItem('currentLocation');
-    if (currentLocation) {
+    if (currentLocation.country_name) {
       this.getCurrentWeather(currentLocation);
       return (this.currentLocation = currentLocation);
     }
