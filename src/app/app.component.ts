@@ -22,6 +22,7 @@ import {
 } from '@angular/animations';
 
 import * as fakeWeatherData from './resources/weatherTestData.json';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -102,6 +103,23 @@ export class AppComponent implements OnInit, OnDestroy {
   handleCurrrentWeatherResponseError(error: any) {
     console.log(error);
     this.forecastWeather = fakeWeatherData;
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    
+    Toast.fire({
+      icon: 'error',
+      title: 'Api not responding',
+      text: 'Test data is used',
+    })
   }
   getIconWeather(weather: WeatherForecastResponse) {
     if (weather) {
