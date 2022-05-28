@@ -15,7 +15,7 @@ export class WeatherService {
     data: WeatherDataToSend
   ): Observable<WeatherForecastResponse> {
     return this.http.get<WeatherForecastResponse>(
-      `${this.baseUrl.url_forecast}?key=${this.baseUrl.key}&q=${data.query}&days=${data.days}`
+      `${this.baseUrl.url_forecast}?key=${this.baseUrl.key}&q=${data.query}&days=${data.days}&aqi=no&alerts=no`
     );
   }
 }
