@@ -110,27 +110,27 @@ export class AppComponent implements OnInit, OnDestroy {
       timer: 3000,
       timerProgressBar: true,
       didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-      }
-    })
-    
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+
     Toast.fire({
       icon: 'error',
       title: 'Api not responding',
       text: 'Test data is used',
-    })
+    });
   }
-  getIconWeather(weather: WeatherForecastResponse) {
-    if (weather) {
-      const image = weather.current.condition.icon.split('/');
+  getIconWeather(icon: string) {
+    if (icon) {
+      const image: any = icon.split('/');
       return `https://cdn.weatherapi.com/weather/128x128/${image.at(
         -2
       )}/${image.at(-1)}`;
     }
     return './assets/icons/weather/celsius.svg';
   }
-  formatDate(dateWeather: string) {
+  formatDate(dateWeather: string, customOption: {} = '') {
     const date = new Date(dateWeather);
     const time = date.getTime();
     const options: any = {
@@ -140,7 +140,7 @@ export class AppComponent implements OnInit, OnDestroy {
       hour: 'numeric',
       minute: 'numeric',
     };
-    return date.toLocaleDateString('en-EN', options);
+    return date.toLocaleDateString('en-EN', customOption || options);
   }
   searchLocation(location: { location: string }) {
     const data = {
@@ -164,7 +164,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isCelsius = temp === 'temp_c' ? true : false;
     this.showDataTemperature = temp;
   }
-  getTemperature(currentWeather: WeatherForecastResponse) {
-    return currentWeather && currentWeather.current[this.showDataTemperature];
+  getTemperature(tempObj: any, prefix: any = '') {
+    if (tempObj && tempObj[prefix + this.showDataTemperature]) {
+      return tempObj[prefix + this.showDataTemperature];
+    }
   }
 }
