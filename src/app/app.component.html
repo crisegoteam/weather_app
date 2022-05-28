@@ -76,13 +76,18 @@
           </button>
         </div>
         <div class="col-span-2 justify-self-center py-10 md:py-24">
-          <img src="{{ getIconWeather(forecastWeather) }}" alt="" />
+          <img
+            src="{{
+              getIconWeather(forecastWeather?.current?.condition?.icon)
+            }}"
+            alt=""
+          />
         </div>
         <div class="col-span-2 justify-self-center">
           <p class="flex items-center">
             <strong
               class="text-7xl md:text-8xl text-white hover:text-gray-400"
-              >{{ getTemperature(forecastWeather) }}</strong
+              >{{ getTemperature(forecastWeather?.current) }}</strong
             >
             <img
               class="invert grayscale"
@@ -118,11 +123,11 @@
       </div>
     </div>
     <div class="predictions_time col-span-12 lg:col-span-8 2xl:col-span-9">
-      <div class="w-10/12 lg:w-9/12 mx-auto">
-        <div class="flex justify-end gap-4 py-2 px-4">
+      <div class="w-10/12 lg:w-11/12 mx-auto">
+        <div class="flex justify-end gap-0 py-2 px-4">
           <span
             (click)="changeTemperature(forecastWeather, 'temp_c')"
-            class="rounded-full bg-white cursor-pointer hidden lg:flex"
+            class="rounded-full bg-white cursor-pointer hidden lg:flex mx-1"
             [ngClass]="{ 'bg-white': isCelsius, 'bg-violet-900': !isCelsius }"
           >
             <img
@@ -134,7 +139,7 @@
           </span>
           <span
             (click)="changeTemperature(forecastWeather, 'temp_f')"
-            class="rounded-full cursor-pointer hidden lg:flex"
+            class="rounded-full cursor-pointer hidden lg:flex mx-1"
             [ngClass]="{ 'bg-violet-900': isCelsius, 'bg-white': !isCelsius }"
           >
             <img
@@ -145,8 +150,120 @@
             />
           </span>
         </div>
-        <div class="highlights_stats bg-pink-300">Today's Highlights</div>
-        <div class="highlights_stats bg-pink-300">Today's Highlights</div>
+        <div class="highlights_stats">
+          <div class="flex flex-wrap justify-start items-center">
+            <ng-container
+              *ngFor="let item of forecastWeather?.forecast?.forecastday"
+            >
+              <div class="w-2/4 sm:w-3/12 md:w-3/12 lg:w-1/5 p-2">
+                <div class="card rounded p-2 bg-slate-800 text-center">
+                  <strong class="text-white">
+                    {{ formatDate(item?.date, { weekday: "short" }) }}
+                  </strong>
+                  <img
+                    class="mx-auto"
+                    src="{{ getIconWeather(item?.day?.condition?.icon) }}"
+                    alt=""
+                  />
+                  <strong class="text-white px-1">
+                    {{ getTemperature(item.day, "max") }}
+                    <img
+                      class="invert grayscale inline-block py-5 -m-3"
+                      src="assets/icons/weather/{{
+                        isCelsius ? 'celsius' : 'fahrenheit'
+                      }}.svg"
+                      width="30"
+                      alt=""
+                    />
+                  </strong>
+
+                  <span class="text-white text-xs px-1">
+                    {{ getTemperature(item.day, "min") }}
+                    <img
+                      class="invert grayscale inline-block p-0 -m-3"
+                      src="assets/icons/weather/{{
+                        isCelsius ? 'celsius' : 'fahrenheit'
+                      }}.svg"
+                      width="30"
+                      alt=""
+                    />
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="flex flex-wrap justify-center items-center">
+            <p
+              class="text-2xl font-bold text-white text-start px-2 py-6 w-full"
+            >
+              Today's highlights
+            </p>
+            <ng-container>
+              <div class="w-full sm:w-2/4 p-2">
+                <div class="card rounded px-2 py-10 bg-slate-800 text-white">
+                  <p class="text-center">Wind status</p>
+                  <p class="text-center text-6xl">
+                    {{ forecastWeather?.current?.wind_kph }}
+                    <span class="text-lg">km/h</span>
+                  </p>
+                  <img
+                    class="mx-auto"
+                    src="assets/icons/weather/wind.svg"
+                    width="40"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="w-full sm:w-2/4 p-2">
+                <div class="card rounded px-2 py-10 bg-slate-800 text-white">
+                  <p class="text-center">Humidity</p>
+                  <p class="text-center text-6xl">
+                    {{ forecastWeather?.current?.humidity }}
+                    <span class="text-lg">%</span>
+                  </p>
+                  <div class="humidity-container w-3/4 mx-auto">
+                    <div class="flex justify-between">
+                      <span
+                        class="text-base font-medium text-blue-700 dark:text-white"
+                        >0%</span
+                      >
+                      <span
+                        class="text-sm font-medium text-blue-700 dark:text-white"
+                        >100%</span
+                      >
+                    </div>
+                    <div
+                      class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"
+                    >
+                      <div
+                        class="bg-blue-600 h-2.5 rounded-full"
+                        attr.style="width: {{ forecastWeather?.current?.humidity }}%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full sm:w-2/4 p-2">
+                <div class="card rounded px-2 py-10 bg-slate-800 text-white">
+                  <p class="text-center">Visibility</p>
+                  <p class="text-center text-6xl">
+                    {{ forecastWeather?.current?.vis_km }}
+                    <span class="text-lg">km/h</span>
+                  </p>
+                </div>
+              </div>
+              <div class="w-full sm:w-2/4 p-2">
+                <div class="card rounded px-2 py-10 bg-slate-800 text-white">
+                  <p class="text-center">Air presure</p>
+                  <p class="text-center text-6xl">
+                    {{ forecastWeather?.current?.pressure_mb }}
+                    <span class="text-lg">mb</span>
+                  </p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
       </div>
     </div>
   </div>
