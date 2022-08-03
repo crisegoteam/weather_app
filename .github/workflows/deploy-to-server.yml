@@ -7,16 +7,16 @@ on:
 jobs:
 
   build:
-    name: Build
+    name: ============ Build ============
     runs-on: [self-hosted, linux, x64, prod]
     steps:
     - uses: actions/checkout@master
     - name: Destroy old stack
       run: docker compose down
 
-    - name: Run build
+    - name: ========== Run build ==========
       run: docker compose build --no-cache
     
-    - name: Start stack
+    - name: =========== Start stack ==========
       run: docker compose up -d
    
