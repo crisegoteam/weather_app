@@ -6,12 +6,9 @@ services:
       dockerfile: Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.weather.rule=Host(`weather.crisego.com`) || Host(`www.weather.crisego.com`)"
+      - "traefik.http.routers.weather.rule=Host(`weather.crisego.com`)"
       - "traefik.http.routers.weather.entrypoints=websecure"
       - "traefik.http.routers.weather.tls=true"
-      - "traefik.http.middlewares.weather-redirect.redirectregex.regex=^https?://(?:www\\.)?(.+)"
-      - "traefik.http.middlewares.weather-redirect.redirectregex.replacement=https://www.$${1}"
-      - "traefik.http.routers.weather.middlewares=weather-redirect"
     networks:
       - traefik-docker-compose_default
 networks:
