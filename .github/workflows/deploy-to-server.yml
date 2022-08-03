@@ -1,0 +1,15 @@
+name: remote ssh command
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@master
+    - name: Print hello wordl
+      run: echo "Hello world"
+
+    - name: Run build
+      run: docker-compose down && docker-compose up -d
+   
