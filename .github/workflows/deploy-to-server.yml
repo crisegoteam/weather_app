@@ -5,18 +5,24 @@ on:
       - master
 
 jobs:
+  test:
+    name: Test
+    runs-on: [self-hosted, prod]
+    steps:
+      - name: ========= Server information =========
+        run: cat /etc/os-release
 
   build:
     name: Build
     runs-on: [self-hosted, linux, x64, prod]
     steps:
     - uses: actions/checkout@master
-    - name: Destroy old stack
+    - name: ========== Destroy old stack ==========
       run: docker compose down
 
-    - name: Run build
+    - name: ========== Run build ==========
       run: docker compose build --no-cache
     
-    - name: Start stack
+    - name: =========== Start stack ==========
       run: docker compose up -d
    
