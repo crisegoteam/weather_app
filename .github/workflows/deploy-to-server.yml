@@ -13,7 +13,7 @@ jobs:
         run: cat /etc/os-release
 
   build:
-    name: Build
+    name: Build and deploy
     runs-on: [self-hosted, linux, x64, prod]
     steps:
     - uses: actions/checkout@master
