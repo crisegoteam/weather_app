@@ -1,4 +1,4 @@
-name: remote ssh command
+name: Deploy to server
 on: [push]
 jobs:
 
@@ -7,9 +7,12 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@master
-    - name: Print hello wordl
-      run: echo "Hello world"
+    - name: Destroy old stack
+      run: docker compose down
 
     - name: Run build
-      run: docker compose down && docker compose up -d
+      run: docker compose build --no-cache
+    
+    - name: Start stack
+      run: docker compose up -d
    
