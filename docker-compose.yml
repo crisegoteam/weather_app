@@ -4,5 +4,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.weather_ui.rule=Host(`weather.com`) || Host(`www.weather.com`)"
+      - "traefik.http.routers.weather_ui.entrypoints=websecure"
+      - "traefik.http.routers.weather_ui.tls=true"
+      - "traefik.http.middlewares.test-redirectregex.redirectregex.regex=^https?://(?:www\\.)?(.+)"
+      - "traefik.http.middlewares.test-redirectregex.redirectregex.replacement=https://www.$${1}"
+      - "traefik.http.routers.weather_ui.middlewares=test-redirectregex"
+    networks:
+      - traefik-docker-compose_default
+networks:
+  traefik-docker-compose_default:
+    external: true
