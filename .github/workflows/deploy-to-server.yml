@@ -11,5 +11,5 @@ jobs:
       run: echo "Hello world"
 
     - name: Run build
-      run: docker-compose down && docker-compose up -d
+      run: docker compose down && docker compose up -d
    
